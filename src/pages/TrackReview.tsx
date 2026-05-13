@@ -10,6 +10,32 @@ interface ReviewRowProps {
   value: string | React.ReactNode;
 }
 
+function AIBadge() {
+  return (
+    <Box
+      component="span"
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 16,
+        height: 16,
+        borderRadius: '4px',
+        bgcolor: '#1E1E2E',
+        color: '#fff',
+        fontWeight: 600,
+        fontSize: '9px',
+        lineHeight: 1,
+        ml: '4px',
+        flexShrink: 0,
+        verticalAlign: 'middle',
+      }}
+    >
+      AI
+    </Box>
+  );
+}
+
 function ReviewRow({ label, value }: ReviewRowProps) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-start', minHeight: 40, borderBottom: '0.5px solid #cac9c9' }}>
@@ -17,7 +43,7 @@ function ReviewRow({ label, value }: ReviewRowProps) {
         <Typography variant="subtitle1" sx={{ color: '#171717', fontSize: '1rem' }}>{label}</Typography>
       </Box>
       <Box sx={{ flex: 1, px: 1, py: 0.5, display: 'flex', alignItems: 'center', minHeight: 40 }}>
-        <Typography variant="body1" sx={{ color: '#000', whiteSpace: 'pre-wrap' }}>{value}</Typography>
+        <Typography variant="body1" component="div" sx={{ color: '#000', whiteSpace: 'pre-wrap' }}>{value}</Typography>
       </Box>
     </Box>
   );
@@ -128,21 +154,46 @@ export default function TrackReview() {
             <ReviewRow
               key={a.id}
               label={a.name}
-              value={`${roleMap[a.role] ?? a.role}${a.usedAI ? ' (IA)' : ''}`}
+              value={
+                <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                  {roleMap[a.role] ?? a.role}
+                  {a.usedAI && <AIBadge />}
+                </Box>
+              }
             />
           ))}
           {state.contributors.map((c) => (
             <ReviewRow
               key={c.id}
               label={c.name}
-              value={c.roles.map((r) => `${contribRoleMap[r] ?? r}${c.usedAI ? ' (IA)' : ''}`).join(', ')}
+              value={
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 0 }}>
+                  {c.roles.map((r, i) => (
+                    <Box key={r} component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                      {i > 0 && <Box component="span" sx={{ mr: '2px' }}>,</Box>}
+                      <Box component="span" sx={{ ml: i > 0 ? '4px' : 0 }}>{contribRoleMap[r] ?? r}</Box>
+                      {c.aiRoles.includes(r) && <AIBadge />}
+                    </Box>
+                  ))}
+                </Box>
+              }
             />
           ))}
           {state.aiCredits.map((c) => (
             <ReviewRow
               key={c.id}
               label={c.name}
-              value={c.roles.map((r) => `${contribRoleMap[r] ?? r} (IA)`).join(', ')}
+              value={
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 0 }}>
+                  {c.roles.map((r, i) => (
+                    <Box key={r} component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                      {i > 0 && <Box component="span" sx={{ mr: '2px' }}>,</Box>}
+                      <Box component="span" sx={{ ml: i > 0 ? '4px' : 0 }}>{contribRoleMap[r] ?? r}</Box>
+                      <AIBadge />
+                    </Box>
+                  ))}
+                </Box>
+              }
             />
           ))}
         </SectionCard>

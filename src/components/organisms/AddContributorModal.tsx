@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function AddContributorModal({ open, onClose, onSave, initial }: Props) {
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3>(initial ? 2 : 1);
   const [name, setName] = useState(initial?.name ?? '');
   const [roles, setRoles] = useState<ContributorRole[]>(initial?.roles ?? []);
   const [interpreterRole, setInterpreterRole] = useState(initial?.performerRoles ?? '');
@@ -97,7 +97,6 @@ export default function AddContributorModal({ open, onClose, onSave, initial }: 
 
   return (
     <Dialog
-      key={initial?.id ?? 'new'}
       open={open}
       onClose={handleClose}
       maxWidth="sm"

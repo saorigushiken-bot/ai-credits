@@ -15,8 +15,11 @@ export default function CreditsForm() {
   const [artistModalOpen, setArtistModalOpen] = useState(false);
   const [editingArtist, setEditingArtist] = useState<Artist | undefined>();
 
-  const [contributorModalOpen, setContributorModalOpen] = useState(false);
-  const [editingContributor, setEditingContributor] = useState<Contributor | undefined>();
+  const [contributorModal, setContributorModal] = useState<{
+    open: boolean;
+    mountKey: number;
+    initial?: Contributor;
+  }>({ open: false, mountKey: 0 });
 
   const [aiModalOpen, setAIModalOpen] = useState(false);
   const [editingAI, setEditingAI] = useState<AICredit | undefined>();
@@ -37,8 +40,7 @@ export default function CreditsForm() {
   const aiRoleLabel = (c: AICredit) => c.roles.map((r) => ROLE_LABELS[r] ?? r).join(', ');
 
   const openContributorModal = (contributor?: Contributor) => {
-    setEditingContributor(contributor);
-    setContributorModalOpen(true);
+    setContributorModal((prev) => ({ open: true, mountKey: prev.mountKey + 1, initial: contributor }));
   };
 
   return (
@@ -140,13 +142,13 @@ export default function CreditsForm() {
       />
 
       <AddContributorModal
-        open={contributorModalOpen}
-        onClose={() => { setContributorModalOpen(false); setEditingContributor(undefined); }}
-        initial={editingContributor}
+        key={contributorModal.mountKey}
+        open={contributorModal.open}
+        initial={contributorModal.initial}
+        onClose={() => setContributorModal((prev) => ({ ...prev, open: false, initial: undefined }))}
         onSave={(c) => {
-          if (editingContributor) dispatch({ type: 'UPDATE_CONTRIBUTOR', contributor: c });
+          if (contributorModal.initial) dispatch({ type: 'UPDATE_CONTRIBUTOR', contributor: c });
           else dispatch({ type: 'ADD_CONTRIBUTOR', contributor: c });
-          setEditingContributor(undefined);
         }}
       />
 
