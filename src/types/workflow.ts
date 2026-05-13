@@ -9,21 +9,25 @@ export interface Artist {
   name: string;
   role: ArtistRole;
   usedAI: boolean;
+  artistRoles?: ContributorRole[];
 }
 
 export interface Contributor {
   id: string;
   name: string;
   roles: ContributorRole[];
-  performerRoles: string[];
-  otherRoles: string[];
+  performerRoles: string;
+  otherRoles: boolean;
+  otherRolesDescription: string;
   usedAI: boolean;
+  aiRoles: ContributorRole[];
 }
 
 export interface AICredit {
   id: string;
   name: string;
   roles: AIRole[];
+  performerRoles: string[];
   otherRoles: string[];
 }
 

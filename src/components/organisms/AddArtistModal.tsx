@@ -1,7 +1,7 @@
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   IconButton, TextField, RadioGroup, FormControl,
-  FormLabel, Typography, Button, Alert,
+  FormLabel, Typography, Button,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
@@ -42,6 +42,7 @@ export default function AddArtistModal({ open, onClose, onSave, initial }: Props
 
   return (
     <Dialog
+      key={initial?.id ?? 'new'}
       open={open}
       onClose={handleClose}
       maxWidth="sm"
@@ -63,7 +64,6 @@ export default function AddArtistModal({ open, onClose, onSave, initial }: Props
           error={!!nameError}
           helperText={nameError}
           fullWidth
-          size="medium"
           slotProps={{ htmlInput: { 'aria-label': 'Nombre del artista' } }}
           sx={{ bgcolor: '#ecedf4', borderRadius: 1 }}
         />
@@ -80,27 +80,19 @@ export default function AddArtistModal({ open, onClose, onSave, initial }: Props
 
         <FormControl component="fieldset">
           <FormLabel component="legend" sx={{ color: '#313030', fontWeight: 500, fontSize: '1rem', mb: 1 }}>
-            ¿Este Artista/invitado utilizó herramientas de IA (mezcla, voz, traducción, etc.)?
+            ¿Este artista ha sido creado íntegramente por IA?
           </FormLabel>
           <RadioGroup value={usedAI} onChange={(e) => setUsedAI(e.target.value as 'si' | 'no')}>
             <RadioButton value="no" label="No" />
             <RadioButton value="si" label="Sí" />
           </RadioGroup>
         </FormControl>
-
-        {usedAI === 'si' && (
-          <Alert severity="info" sx={{ bgcolor: '#ecedf4', color: '#313030', border: 'none' }} icon={false}>
-            <Typography variant="body2">
-              * Una persona de IA generativa es una entidad o perfil virtual que actúa como intérprete principal del rol seleccionado.
-            </Typography>
-          </Alert>
-        )}
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
-        <Button variant="outlined" onClick={handleClose}>Atrás</Button>
+        <Button variant="outlined" onClick={handleClose}>Cancelar</Button>
         <Button variant="contained" onClick={handleSave} sx={{ bgcolor: '#cf0389', '&:hover': { bgcolor: '#b00278' } }}>
-          {initial ? 'Guardar cambios' : 'Añadir artista'}
+          {initial ? 'Guardar cambios' : 'Guardar'}
         </Button>
       </DialogActions>
     </Dialog>
