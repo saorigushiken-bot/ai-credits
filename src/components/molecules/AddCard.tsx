@@ -3,13 +3,15 @@ import { Box, Typography } from '@mui/material';
 interface AddCardProps {
   label: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
-export default function AddCard({ label, onClick }: AddCardProps) {
+export default function AddCard({ label, onClick, disabled = false }: AddCardProps) {
   return (
     <Box
       component="button"
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -21,11 +23,12 @@ export default function AddCard({ label, onClick }: AddCardProps) {
         borderRadius: 1,
         minHeight: 72,
         width: '100%',
-        cursor: 'pointer',
+        cursor: disabled ? 'default' : 'pointer',
         textAlign: 'left',
         transition: 'background-color 0.15s',
-        '&:hover': { bgcolor: '#f5f5f5' },
-        '&:focus-visible': { outline: '2px solid #484f7a', outlineOffset: 2 },
+        opacity: disabled ? 0.38 : 1,
+        '&:hover': { bgcolor: disabled ? '#fff' : '#f5f5f5' },
+        '&:focus-visible': { outline: disabled ? 'none' : '2px solid #484f7a', outlineOffset: 2 },
       }}
     >
       <Box

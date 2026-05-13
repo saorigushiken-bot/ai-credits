@@ -121,7 +121,11 @@ export default function CreditsForm() {
             onDelete={() => dispatch({ type: 'REMOVE_AI_CREDIT', id: c.id })}
           />
         ))}
-        <AddCard label="Añadir perfil de IA generativa (opcional)" onClick={() => { setEditingAI(undefined); setAIModalOpen(true); }} />
+        <AddCard
+          label="Añadir perfil de IA generativa (opcional)"
+          onClick={() => { setEditingAI(undefined); setAIModalOpen(true); }}
+          disabled={state.aiCredits.length > 0}
+        />
       </Box>
 
       {/* Modals */}

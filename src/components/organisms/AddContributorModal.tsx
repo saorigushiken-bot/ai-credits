@@ -43,6 +43,19 @@ export default function AddContributorModal({ open, onClose, onSave, initial }: 
     setAiRoles((prev) => prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]);
   };
 
+  const resetState = () => {
+    setStep(1);
+    setName('');
+    setRoles([]);
+    setInterpreterRole('');
+    setHasOtherRoles(false);
+    setOtherRolesValue('');
+    setUsedAI(null);
+    setAiRoles([]);
+    setNameError('');
+    setRolesError('');
+  };
+
   const save = (withAI: boolean, finalAiRoles: ContributorRole[]) => {
     onSave({
       id: initial?.id ?? crypto.randomUUID(),
@@ -54,6 +67,7 @@ export default function AddContributorModal({ open, onClose, onSave, initial }: 
       usedAI: withAI,
       aiRoles: finalAiRoles,
     });
+    resetState();
     onClose();
   };
 
@@ -73,16 +87,7 @@ export default function AddContributorModal({ open, onClose, onSave, initial }: 
   };
 
   const handleClose = () => {
-    setStep(1);
-    setName(initial?.name ?? '');
-    setRoles(initial?.roles ?? []);
-    setInterpreterRole(initial?.performerRoles ?? '');
-    setHasOtherRoles(initial?.otherRoles ?? false);
-    setOtherRolesValue(initial?.otherRolesDescription ?? '');
-    setUsedAI(initial?.usedAI === true ? 'si' : initial?.usedAI === false ? 'no' : null);
-    setAiRoles(initial?.aiRoles ?? []);
-    setNameError('');
-    setRolesError('');
+    resetState();
     onClose();
   };
 

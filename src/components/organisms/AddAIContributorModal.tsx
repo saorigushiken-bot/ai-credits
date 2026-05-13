@@ -31,6 +31,14 @@ export default function AddAIContributorModal({ open, onClose, onSave, initial }
     setRolesError('');
   };
 
+  const resetState = () => {
+    setRoles([]);
+    setPerformerRoles([]);
+    setHasOtherRoles(false);
+    setOtherRoles([]);
+    setRolesError('');
+  };
+
   const handleSave = () => {
     if (roles.length === 0) { setRolesError('Selecciona al menos un rol'); return; }
     if (roles.includes('intérprete') && performerRoles.length === 0) {
@@ -38,15 +46,12 @@ export default function AddAIContributorModal({ open, onClose, onSave, initial }
       return;
     }
     onSave({ id: initial?.id ?? crypto.randomUUID(), name: 'Generative AI', roles, performerRoles, otherRoles });
+    resetState();
     onClose();
   };
 
   const handleClose = () => {
-    setRoles(initial?.roles ?? []);
-    setPerformerRoles(initial?.performerRoles ?? []);
-    setHasOtherRoles(false);
-    setOtherRoles(initial?.otherRoles ?? []);
-    setRolesError('');
+    resetState();
     onClose();
   };
 
@@ -121,7 +126,6 @@ export default function AddAIContributorModal({ open, onClose, onSave, initial }
               >
                 {OTHER_ROLES_OPTIONS.map((r) => <MenuItem key={r} value={r}>{r}</MenuItem>)}
               </Select>
-              <FormHelperText>Opcional</FormHelperText>
             </MUIFormControl>
           )}
         </Box>

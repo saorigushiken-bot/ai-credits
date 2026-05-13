@@ -195,7 +195,7 @@ export default function Step2TrackDetails() {
             onClick={() => navigate('/review')}
             sx={{ bgcolor: '#cf0389', '&:hover': { bgcolor: '#b00278' }, minWidth: 140 }}
           >
-            Guardar y continuar
+            Enviar a revisión
           </Button>
         </Box>
       </Box>

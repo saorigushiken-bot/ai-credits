@@ -17,26 +17,33 @@ interface Props {
 
 export default function AddArtistModal({ open, onClose, onSave, initial }: Props) {
   const [name, setName] = useState(initial?.name ?? '');
-  const [role, setRole] = useState<'principal' | 'invitado'>(initial?.role ?? 'principal');
-  const [usedAI, setUsedAI] = useState<'si' | 'no'>(initial?.usedAI ? 'si' : 'no');
+  const [role, setRole] = useState<'principal' | 'invitado' | null>(initial?.role ?? null);
+  const [usedAI, setUsedAI] = useState<'si' | 'no' | null>(
+    initial?.usedAI === true ? 'si' : initial?.usedAI === false ? 'no' : null
+  );
   const [nameError, setNameError] = useState('');
+
+  const resetState = () => {
+    setName('');
+    setRole(null);
+    setUsedAI(null);
+    setNameError('');
+  };
 
   const handleSave = () => {
     if (!name.trim()) { setNameError('El nombre es obligatorio'); return; }
     onSave({
       id: initial?.id ?? crypto.randomUUID(),
       name: name.trim(),
-      role,
+      role: role ?? 'principal',
       usedAI: usedAI === 'si',
     });
+    resetState();
     onClose();
   };
 
   const handleClose = () => {
-    setName(initial?.name ?? '');
-    setRole(initial?.role ?? 'principal');
-    setUsedAI(initial?.usedAI ? 'si' : 'no');
-    setNameError('');
+    resetState();
     onClose();
   };
 
@@ -73,14 +80,14 @@ export default function AddArtistModal({ open, onClose, onSave, initial }: Props
             Indica si participa en esta pista como artista principal o invitado:
           </FormLabel>
           <RadioGroup value={role} onChange={(e) => setRole(e.target.value as 'principal' | 'invitado')}>
-            <RadioButton value="principal" label="Principal" />
-            <RadioButton value="invitado" label="Invitado" />
+            <RadioButton value="principal" label="Artista principal" />
+            <RadioButton value="invitado" label="Artista invitado/a" />
           </RadioGroup>
         </FormControl>
 
         <FormControl component="fieldset">
           <FormLabel component="legend" sx={{ color: '#313030', fontWeight: 500, fontSize: '1rem', mb: 1 }}>
-            ¿Este artista ha sido creado íntegramente por IA?
+            ¿Este artista ha sido creado íntegramente por IA (Inteligencia Artificial)?
           </FormLabel>
           <RadioGroup value={usedAI} onChange={(e) => setUsedAI(e.target.value as 'si' | 'no')}>
             <RadioButton value="no" label="No" />
