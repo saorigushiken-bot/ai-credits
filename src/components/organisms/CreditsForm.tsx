@@ -109,7 +109,7 @@ export default function CreditsForm() {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
         <Typography variant="subtitle1" sx={{ color: '#313030' }}>Créditos de IA (Inteligencia Artificial)</Typography>
         <Typography variant="body2" sx={{ color: '#797676' }}>
-          Si uno o varios roles en esta pista fueron generados íntegramente por IA, también puedes añadirlos por separado en esta sección. Aparecerán bajo el contribuidor GenerativeAI.
+          Si uno o varios roles en esta pista fueron generados íntegramente por IA, también puedes añadirlos por separado en esta sección. Aparecerán bajo el nombre del contribuidor GenerativeAI.
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

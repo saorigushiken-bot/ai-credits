@@ -203,7 +203,7 @@ export default function AddContributorModal({ open, onClose, onSave, initial }: 
 
             <FormControl component="fieldset">
               <FormLabel component="legend" sx={{ color: '#313030', fontWeight: 500, fontSize: '1rem', mb: 1 }}>
-                ¿Alguno de estos roles lo realizó íntegramente una IA (Inteligencia Artificial)?
+                ¿Al menos uno de estos roles lo realizó íntegramente una IA (Inteligencia Artificial)?
               </FormLabel>
               <RadioGroup
                 value={usedAI ?? ''}
