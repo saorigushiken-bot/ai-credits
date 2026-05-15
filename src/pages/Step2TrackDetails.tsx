@@ -3,11 +3,13 @@ import {
   FormLabel, Checkbox, FormControlLabel, Button, Select,
   MenuItem, InputLabel, OutlinedInput, Divider, AppBar, Toolbar,
 } from '@mui/material';
+import { useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { useWorkflow } from '../context/WorkflowContext';
 import AudioPlayer from '../components/molecules/AudioPlayer';
 import CreditsForm from '../components/organisms/CreditsForm';
+import CreditsInfoModal from '../components/organisms/CreditsInfoModal';
 import InfoTooltip from '../components/atoms/InfoTooltip';
 import RadioButton from '../components/atoms/RadioButton';
 
@@ -17,6 +19,7 @@ const LANGUAGES = ['Español', 'Inglés', 'Portugués', 'Francés', 'Alemán', '
 export default function Step2TrackDetails() {
   const navigate = useNavigate();
   const { state, dispatch } = useWorkflow();
+  const [creditsInfoOpen, setCreditsInfoOpen] = useState(false);
 
   const set = (field: keyof typeof state, value: unknown) =>
     dispatch({ type: 'SET_FIELD', field, value });
@@ -163,9 +166,24 @@ export default function Step2TrackDetails() {
 
         {/* Créditos */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Typography variant="h6" sx={{ color: '#0d0d0d', fontSize: '1.5rem' }}>Créditos</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1.5 }}>
+            <Typography variant="h6" sx={{ color: '#0d0d0d', fontSize: '1.5rem' }}>Créditos</Typography>
+            <Typography
+              component="button"
+              onClick={() => setCreditsInfoOpen(true)}
+              sx={{
+                border: 'none', background: 'none', cursor: 'pointer',
+                color: '#484f7a', fontWeight: 500, fontSize: '0.875rem',
+                p: 0, lineHeight: 1, textDecoration: 'underline',
+              }}
+            >
+              Saber más
+            </Typography>
+          </Box>
           <CreditsForm />
         </Box>
+
+        <CreditsInfoModal open={creditsInfoOpen} onClose={() => setCreditsInfoOpen(false)} />
 
         {/* Identificador estándar */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
