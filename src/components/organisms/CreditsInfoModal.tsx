@@ -34,22 +34,16 @@ function AIBadge() {
   );
 }
 
-function ExampleRow({ name, roleContent }: { name: string; roleContent: React.ReactNode }) {
+function ExampleEntry({ name, roles }: { name: string; roles: { label: string; ai?: boolean }[] }) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
-      <Typography variant="body2" sx={{ color: '#171717', fontWeight: 500 }}>{name}</Typography>
-      <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
-        {roleContent}
-      </Box>
-    </Box>
-  );
-}
-
-function RoleChip({ label, ai }: { label: string; ai?: boolean }) {
-  return (
-    <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-      <Typography variant="body2" sx={{ color: '#535353', fontSize: '0.8125rem' }}>{label}</Typography>
-      {ai && <AIBadge />}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+      <Typography sx={{ fontWeight: 600, fontSize: '0.875rem', color: '#171717' }}>{name}</Typography>
+      {roles.map((r, i) => (
+        <Box key={i} sx={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+          <Typography sx={{ fontWeight: 400, fontSize: '0.875rem', color: '#797676' }}>{r.label}</Typography>
+          {r.ai && <AIBadge />}
+        </Box>
+      ))}
     </Box>
   );
 }
@@ -100,32 +94,30 @@ export default function CreditsInfoModal({ open, onClose }: Props) {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
-              gap: 2,
+              gap: 1.5,
             }}
           >
-            <ExampleRow
-              name="Nombre del artista"
-              roleContent={
-                <>
-                  <RoleChip label="Artista principal" ai />
-                </>
-              }
+            <ExampleEntry
+              name="Nombre del artista principal"
+              roles={[{ label: 'Artista principal' }]}
             />
-
-            <ExampleRow
+            <Divider sx={{ borderColor: '#E0E0E0' }} />
+            <ExampleEntry
+              name="Nombre del artista secundario"
+              roles={[{ label: 'Artista secundario', ai: true }]}
+            />
+            <Divider sx={{ borderColor: '#E0E0E0' }} />
+            <ExampleEntry
               name="GenerativeAI"
-              roleContent={
-                <>
-                  <RoleChip label="Voces" ai />
-                  <Typography component="span" sx={{ color: '#535353', fontSize: '0.8125rem' }}>·</Typography>
-                  <RoleChip label="Todos los instrumentos" ai />
-                </>
-              }
+              roles={[
+                { label: 'Voces', ai: true },
+                { label: 'Todos los instrumentos', ai: true },
+              ]}
             />
-
-            <ExampleRow
+            <Divider sx={{ borderColor: '#E0E0E0' }} />
+            <ExampleEntry
               name="Nombre del contribuidor"
-              roleContent={<RoleChip label="Letrista" />}
+              roles={[{ label: 'Letrista' }]}
             />
           </Box>
         </Box>
