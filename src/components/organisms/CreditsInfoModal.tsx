@@ -73,13 +73,15 @@ export default function CreditsInfoModal({ open, onClose }: Props) {
       </DialogTitle>
 
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1 }}>
-        <Typography sx={{ fontSize: '16px', color: '#797676', lineHeight: 1.6 }}>
-          Los créditos que declares aquí serán enviados a las plataformas de distribución y
-          aparecerán visibles para los oyentes en la sección de créditos de cada pista.
-          <br /><br />
-          Los créditos se muestran a nivel de rol. Aquellos roles que fueron generados íntegramente
-          por inteligencia artificial aparecerán identificados con una etiqueta AI junto al rol
-          correspondiente.
+        <Typography sx={{ fontSize: '16px', color: '#797676', lineHeight: '24px' }}>
+          Industry research has shown that listeners really want to know how AI is being used; and
+          Spotify's AI credits are designed to help listeners understand the nuance of AI use.
+        </Typography>
+        <Typography sx={{ fontSize: '16px', color: '#797676', lineHeight: '24px' }}>
+          If AI was used to generate a specific contribution (e.g., lyrics, vocals, instrumental
+          performance), please indicate that below. In the case of mixed AI and non-AI contributions
+          for the same role, such as lyric writing, you can list multiple contributors and apply the
+          AI tagging where relevant.
         </Typography>
 
         <Box>
@@ -122,19 +124,6 @@ export default function CreditsInfoModal({ open, onClose }: Props) {
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            bgcolor: '#F5F5F5',
-            borderRadius: '8px',
-            p: 2,
-          }}
-        >
-          <Typography sx={{ fontSize: '14px', color: '#535353', lineHeight: 1.6 }}>
-            Declarar el uso de IA es actualmente opcional y no afecta a tus reproducciones,
-            regalías ni a la visibilidad de tu música. El objetivo es ofrecer transparencia a
-            tus oyentes sobre cómo fue creada la pista.
-          </Typography>
-        </Box>
       </DialogContent>
 
       <Divider />

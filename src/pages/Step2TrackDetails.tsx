@@ -177,7 +177,7 @@ export default function Step2TrackDetails() {
                 p: 0, lineHeight: 1, textDecoration: 'underline',
               }}
             >
-              Saber más
+              Sobre las etiquetas de IA
             </Typography>
           </Box>
           <CreditsForm />
@@ -211,9 +211,9 @@ export default function Step2TrackDetails() {
             variant="contained"
             size="large"
             onClick={() => navigate('/review')}
-            sx={{ bgcolor: '#cf0389', '&:hover': { bgcolor: '#b00278' }, minWidth: 140 }}
+            sx={{ bgcolor: '#cf0389', '&:hover': { bgcolor: '#b00278' }, borderRadius: '100px', height: 40, textTransform: 'none', px: 3 }}
           >
-            Enviar a revisión
+            Guardar y volver
           </Button>
         </Box>
       </Box>

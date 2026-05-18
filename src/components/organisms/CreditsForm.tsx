@@ -1,5 +1,6 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import ArtistCard from '../molecules/ArtistCard';
 import AddCard from '../molecules/AddCard';
@@ -8,6 +9,31 @@ import AddContributorModal from './AddContributorModal';
 import AddAIContributorModal from './AddAIContributorModal';
 import { useWorkflow } from '../../context/WorkflowContext';
 import type { Artist, Contributor, AICredit } from '../../types/workflow';
+
+
+function SavedAIBadge() {
+  return (
+    <Box
+      component="span"
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 16,
+        height: 16,
+        borderRadius: '2px',
+        bgcolor: '#484646',
+        color: '#fff',
+        fontWeight: 600,
+        fontSize: '12px',
+        lineHeight: 1,
+        flexShrink: 0,
+      }}
+    >
+      AI
+    </Box>
+  );
+}
 
 export default function CreditsForm() {
   const { state, dispatch } = useWorkflow();
@@ -71,7 +97,11 @@ export default function CreditsForm() {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
         <Typography variant="subtitle1" sx={{ color: '#313030' }}>Contribuidores</Typography>
         <Typography variant="body2" sx={{ color: '#797676' }}>
-          Añade las personas que han colaborado en esta pista. Es obligatorio indicar al menos un compositor, productor y letrista (si incluye letra).
+          Añade las personas que han colaborado en esta pista. Es obligatorio indicar al menos un
+          compositor, productor y letrista (si incluye letra). Especifica también los roles exactos
+          que interpreta cada artista (por ejemplo, Voces, Guitarra, Conjunto, Remixer). Puedes
+          encontrar la lista de los roles disponibles{' '}
+          <Box component="a" href="#" sx={{ color: '#484f7a', fontWeight: 500 }}>aquí</Box>.
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -105,29 +135,73 @@ export default function CreditsForm() {
         </Button>
       </Box>
 
-      {/* Créditos IA — siempre visible */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}>
-        <Typography variant="subtitle1" sx={{ color: '#313030' }}>Créditos de IA (Inteligencia Artificial)</Typography>
-        <Typography variant="body2" sx={{ color: '#797676' }}>
-          Si uno o varios roles en esta pista fueron generados íntegramente por IA, también puedes añadirlos por separado en esta sección. Aparecerán bajo el nombre del contribuidor GenerativeAI.
+      {/* GenerativeAI — bloque inline */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mt: 1 }}>
+        {state.aiCredits.length > 0 ? (
+          state.aiCredits.map((c) => (
+            <Box
+              key={c.id}
+              sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 2, bgcolor: '#ecedf4', borderRadius: '4px', height: 72, width: '100%' }}
+            >
+              <Box sx={{ width: 40, height: 40, borderRadius: '50%', bgcolor: '#484f7a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 16, fontWeight: 500, flexShrink: 0 }}>
+                G
+              </Box>
+              <Box sx={{ flex: 1, overflow: 'hidden' }}>
+                <Typography variant="body1" sx={{ color: '#000' }}>GenerativeAI</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                  <Typography variant="body2" sx={{ color: '#000' }}>{aiRoleLabel(c)}</Typography>
+                  <SavedAIBadge />
+                  <Typography
+                    component="button"
+                    onClick={() => { setEditingAI(c); setAIModalOpen(true); }}
+                    sx={{ border: 'none', background: 'none', cursor: 'pointer', color: '#484f7a', fontWeight: 500, fontSize: '0.875rem', p: 0, lineHeight: 1, textDecoration: 'underline' }}
+                  >
+                    Edit
+                  </Typography>
+                </Box>
+              </Box>
+              <IconButton
+                aria-label="Eliminar crédito de IA"
+                onClick={() => dispatch({ type: 'REMOVE_AI_CREDIT', id: c.id })}
+                size="small"
+                sx={{ color: '#535353' }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          ))
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              px: 2,
+              bgcolor: '#fff',
+              border: '1px dashed #959393',
+              borderRadius: '4px',
+              height: 72,
+              width: '100%',
+            }}
+          >
+            <SavedAIBadge />
+            <Typography sx={{ flex: 1, fontSize: '0.875rem', color: '#797676', fontWeight: 400, lineHeight: 1.5 }}>
+              Si más de un rol se generó íntegramente por IA, puedes añadirlos como GenerativeAI.
+            </Typography>
+            <Typography
+              component="button"
+              onClick={() => { setEditingAI(undefined); setAIModalOpen(true); }}
+              sx={{ border: 'none', background: 'none', cursor: 'pointer', color: '#484f7a', fontWeight: 500, fontSize: '0.875rem', p: 0, lineHeight: 1, flexShrink: 0 }}
+            >
+              + Añadir contribuidor
+            </Typography>
+          </Box>
+        )}
+
+        <Typography variant="body2" sx={{ color: '#797676', fontSize: '0.875rem' }}>
+          Créditos Generative AI: Identifica que la IA generó íntegramente una contribución
+          específica, como voces o letras. Se aplica a nivel de rol, no al track completo.
         </Typography>
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        {state.aiCredits.map((c) => (
-          <ArtistCard
-            key={c.id}
-            name={c.name}
-            roleLabel={aiRoleLabel(c)}
-            usedAI={true}
-            onEdit={() => { setEditingAI(c); setAIModalOpen(true); }}
-            onDelete={() => dispatch({ type: 'REMOVE_AI_CREDIT', id: c.id })}
-          />
-        ))}
-        <AddCard
-          label="Añadir perfil de IA generativa (opcional)"
-          onClick={() => { setEditingAI(undefined); setAIModalOpen(true); }}
-          disabled={state.aiCredits.length > 0}
-        />
       </Box>
 
       {/* Modals */}
